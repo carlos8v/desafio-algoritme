@@ -1,19 +1,33 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import {
+  Login,
+  Register,
+  Dashboard,
+  NotFound
+} from './pages';
 
 import PrivateRoute from './PrivateRoute';
 
+import { AuthProvider } from './contexts/AuthContext';
+
+const MainContext: React.FC = ({ children }) => (
+  <AuthProvider>
+    {children}
+  </AuthProvider>
+)
+
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <MainContext>
       <Switch>
-        <Route path="/" component={Login}/>
-        <PrivateRoute path="/dashboard" component={Dashboard} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <PrivateRoute exact path="/" component={Dashboard} />
+        <Route path="*" component={NotFound} />
       </Switch>
-    </BrowserRouter>
+    </MainContext>
   );
 }
 
