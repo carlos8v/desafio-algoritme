@@ -11,10 +11,13 @@ import {
 import PrivateRoute from './PrivateRoute';
 
 import { AuthProvider } from './contexts/AuthContext';
+import { TransactionProvider } from './contexts/TransactionContext';
 
 const MainContext: React.FC = ({ children }) => (
   <AuthProvider>
-    {children}
+    <TransactionProvider>
+      {children}
+    </TransactionProvider>
   </AuthProvider>
 )
 

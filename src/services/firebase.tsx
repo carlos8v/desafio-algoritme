@@ -1,5 +1,6 @@
-import firebase from "firebase/app"
-import "firebase/auth"
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
@@ -13,5 +14,7 @@ const app = firebase.initializeApp({
 
 const auth = app.auth();
 
-export { firebase, auth };
-export default app;
+const collection = 'transactions';
+const db = firebase.firestore().collection(collection);
+
+export { firebase, auth, db };

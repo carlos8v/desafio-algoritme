@@ -3,16 +3,28 @@ import renderWithRouter from './renderWithRouter';
 import { waitFor } from '@testing-library/react';
 import App from '../App';
 
-import * as authContext from '../contexts/AuthContext';
+import { mockCheckLoggedUser, mockGetTransactions } from './actions';
+
+import { transactions } from './mocks';
 
 describe('Dashboard page', () => {
-  const mockedUser = { email: 'admin@algoritme.com' };
-  it('should be in the correct page', async () => {
-    const mockedCheckUserLogged = jest.spyOn(authContext, 'useAuth');
-    (mockedCheckUserLogged as jest.Mocked<any>).mockImplementation(() => ({
-      currentUser: mockedUser,
-    }));
+  beforeEach(() => {
+    mockCheckLoggedUser();
+    mockGetTransactions(transactions);
+  });  
 
+  afterEach(() => jest.clearAllMocks());
+  
+  it('should have the correct pathname', async () => {
+    const { history } = renderWithRouter(<App />);
+
+    await waitFor(() => {
+      const expected = '/';
+      expect(history.location.pathname).toBe(expected);
+    });
+  });
+
+  it('should have the correct user info', async () => {
     const { getByText } = renderWithRouter(<App />);
 
     await waitFor(() => {
@@ -22,7 +34,19 @@ describe('Dashboard page', () => {
       expect(dashboardTitle).toBeInTheDocument();
       expect(loggedEmail).toBeInTheDocument();
     });
+  });
 
-    mockedCheckUserLogged.mockReset();
+  it('should have the mocked transactions data', async () => {
+    const { getAllByTestId, getByTestId } = renderWithRouter(<App />);
+
+    await waitFor(() => {
+      const transactionsList = getAllByTestId('transaction');
+      expect(transactionsList).toHaveLength(transactions.length);
+
+      for (const trx of transactions) {
+        const element = getByTestId(`transaction-${trx.id}-value`);
+        expect(element).toBeInTheDocument();
+      }
+    });
   });
 });
