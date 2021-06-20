@@ -19,7 +19,7 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     if (confirmPassword !== password) {
-      return setError('Passwords doesn\'t match');
+      return setError('Senhas não coincidem');
     }
 
     const minLength = 8;

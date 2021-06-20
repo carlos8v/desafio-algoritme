@@ -3,15 +3,13 @@ import renderWithRouter from './renderWithRouter';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
 
-import { auth } from '../services/firebase';
-
-import { signUp } from './actions';
-import { createMemoryHistory } from 'history';
+import { signUp, mockSignUp, createHistory, mockGetTransactions } from './actions';
 
 describe('Register page', () => {
-  const mockedUser = { email: 'admin@algoritme.com' };
-  const mockedHistory = createMemoryHistory();
-  mockedHistory.push('/register');
+  beforeEach(() => mockGetTransactions());
+  afterEach(() => jest.clearAllMocks());
+
+  const mockedHistory = createHistory(['/register']);
 
   it('should have the correct pathname', async () => {
     const { history, getByTestId } = renderWithRouter(<App />);
@@ -52,18 +50,17 @@ describe('Register page', () => {
   });
 
   it('should call login function', async () => {
-    const mockedSignUn = jest.spyOn(auth, 'createUserWithEmailAndPassword');
-    (mockedSignUn as jest.Mocked<any>).mockImplementation(() => Promise.resolve(mockedUser));
+    const mockedSignUp = mockSignUp();
   
     renderWithRouter(<App />, mockedHistory);
 
     await waitFor(() => {
       signUp('admin@algoritme.com', 'algoritme', screen);
 
-      expect(mockedSignUn).toHaveBeenCalled();
-      expect(mockedSignUn).toHaveBeenCalledTimes(1);
+      expect(mockedSignUp).toHaveBeenCalled();
+      expect(mockedSignUp).toHaveBeenCalledTimes(1);
     });
 
-    mockedSignUn.mockReset();
+    mockedSignUp.mockRestore();
   });
 });
