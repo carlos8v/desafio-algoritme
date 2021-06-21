@@ -11,9 +11,9 @@ import {
   createHistory,
 } from './actions';
 
-import { mockedTransactions, mockedNewTransaction } from './mocks';
+import { mockedNewTransaction } from './mocks';
 
-describe('Dashboard page', () => {
+describe('NewTransaction page', () => {
   beforeEach(() => {
     mockUseAuth();
     mockFirestoreOnSnapshot();
@@ -61,7 +61,7 @@ describe('Dashboard page', () => {
   });
 
   it('should add a new transaction', async () => {
-    const { addFunction, mockedUseTransaction } = mockUseTransaction(mockedTransactions, mockedNewTransaction);
+    const { addFunction, mockedUseTransaction } = mockUseTransaction();
 
     const { history, getByTestId, queryByTestId } = renderWithRouter(<App />);
 

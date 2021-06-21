@@ -5,7 +5,7 @@ import App from '../App';
 
 import { mockFirestoreOnSnapshot } from './actions';
 
-describe('Not found page', () => {
+describe('NotFound page', () => {
   beforeEach(() => mockFirestoreOnSnapshot());
   afterEach(() => jest.clearAllMocks());
 
