@@ -7,6 +7,7 @@ import {
   Dashboard,
   NewTransaction,
   NotFound,
+  TransactionList,
 } from './pages';
 
 import PrivateRoute from './PrivateRoute';
@@ -30,6 +31,7 @@ const App: React.FC = () => {
         <Route path="/register" component={Register} />
         <PrivateRoute exact path="/" component={Dashboard} />
         <PrivateRoute path="/new" component={NewTransaction} />
+        <PrivateRoute path="/list" component={TransactionList} />
         <Route path="*" component={NotFound} />
       </Switch>
     </MainContext>
