@@ -5,8 +5,9 @@ import { TransactionProps } from '../contexts/TransactionContext';
 import { auth, db } from '../services/firebase';
 
 import * as authContext from '../contexts/AuthContext';
+import * as transactionContext from '../contexts/TransactionContext';
 
-import { transactions } from './mocks';
+import { mockedTransactions, mockedNewTransaction } from './mocks';
 
 export const createHistory = (routes: string[] = []) => {
   const mockedHistory = createMemoryHistory();
@@ -42,6 +43,17 @@ export const signUp = (email: string, password: string, screen: Screen) => {
   fireEvent.click(submitButton);
 };
 
+export const addTransaction = (newTransaction: TransactionProps, screen: Screen) => {
+  const typeInput = screen.getByTestId('type-input');
+  const valueInput = screen.getByTestId('value-input');
+  const submitButton = screen.getByTestId('submit-button');
+
+  fireEvent.change(typeInput, { target: { value: newTransaction.type } });
+  fireEvent.change(valueInput, { target: { value: newTransaction.value } });
+
+  fireEvent.click(submitButton);
+};
+
 export const mockSignIn = (mockedUser = { email: 'admin@algoritme.com' }) => {
   const mockedSignIn = jest.spyOn(auth, 'signInWithEmailAndPassword');
   (mockedSignIn as jest.Mocked<any>).mockImplementation(() => Promise.resolve(mockedUser));
@@ -54,18 +66,18 @@ export const mockSignUp = (mockedUser = { email: 'admin@algoritme.com' }) => {
   return mockedSignUp;
 };
 
-export const mockCheckLoggedUser = (mockedUser = { email: 'admin@algoritme.com' }) => {
-  const mockedCheckLoggedUser = jest.spyOn(authContext, 'useAuth');
-  (mockedCheckLoggedUser as jest.Mocked<any>).mockImplementation(() => ({
+export const mockUseAuth = (mockedUser = { email: 'admin@algoritme.com' }) => {
+  const mockedUseAuth = jest.spyOn(authContext, 'useAuth');
+  (mockedUseAuth as jest.Mocked<any>).mockImplementation(() => ({
     currentUser: mockedUser,
   }));
 
-  return mockedCheckLoggedUser;
+  return mockedUseAuth;
 };
 
-export const mockGetTransactions = (mockedTransactions: TransactionProps[] = transactions) => {
+export const mockFirestoreOnSnapshot = (mockedTrxs: TransactionProps[] = mockedTransactions) => {
   const mockedResult = {
-    docs: mockedTransactions.map((trx) => ({
+    docs: mockedTrxs.map((trx) => ({
       id: trx.id,
       data: () => ({
         type: trx.type,
@@ -75,12 +87,26 @@ export const mockGetTransactions = (mockedTransactions: TransactionProps[] = tra
     })),
   };
 
-  const mockGetTransactions = jest.spyOn(db, 'onSnapshot');
-  (mockGetTransactions as jest.Mocked<any>)
+  const mockedFirestoreOnSnapshot = jest.spyOn(db, 'onSnapshot');
+  (mockedFirestoreOnSnapshot as jest.Mocked<any>)
     .mockImplementation((cb: (_: any) => void) => {
       cb(mockedResult);
       return () => {};
     });
 
-  return mockGetTransactions;
+  return mockedFirestoreOnSnapshot;
+};
+
+export const mockUseTransaction = (
+  mockedTrxs: TransactionProps[] = mockedTransactions,
+  newTrx: TransactionProps = mockedNewTransaction,
+) => {
+  const mockedAddFunction = jest.fn().mockResolvedValue(mockedTrxs.push(newTrx));
+  const mockedUseTransaction = jest.spyOn(transactionContext, 'useTransaction');
+  (mockedUseTransaction as jest.Mocked<any>).mockImplementation(() => ({
+    add: mockedAddFunction,
+    transactions: mockedTrxs,
+  }));
+
+  return { mockedUseTransaction, addFunction: mockedAddFunction };
 };

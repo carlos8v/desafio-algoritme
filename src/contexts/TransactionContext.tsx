@@ -1,23 +1,24 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { db } from '../services/firebase';
+import { db, firebase } from '../services/firebase';
 
 export interface TransactionProps {
   id: string;
   type: 'incoming' | 'outgoing';
   user: string;
   value: number;
+  createdAt: Date;
 };
 
 interface TransactionContextProps {
   transactions: TransactionProps[];
-  add: (type: 'incoming' | 'outgoing', user: string, value: number) => void;
-  delete: (id: string) => void;
+  add: (type: string, user: string, value: number) => Promise<firebase.firestore.DocumentReference | void>;
+  delete: (id: string) => Promise<void>;
 }
 
 const TransactionContext = createContext<TransactionContextProps>({
   transactions: [],
-  add: (type: 'incoming' | 'outgoing', user: string, value: number) => {},
-  delete: (id: string) => {},
+  add: (type: string, user: string, value: number) => Promise.resolve(),
+  delete: (id: string) => Promise.resolve(),
 });
 
 export const useTransaction = () => useContext(TransactionContext);
@@ -29,8 +30,14 @@ export const TransactionProvider: React.FC = ({ children }) => {
   useEffect(() => {
     const unsubscribe = db.onSnapshot((data) => {
       setTransactions(data.docs.map(trx => {
-        const { type, user, value } = trx.data();
-        return { id: trx.id, type, user, value };
+        const { type, user, value, createdAt: serverTimestamp } = trx.data();
+        return {
+          id: trx.id,
+          type,
+          user,
+          value,
+          createdAt: serverTimestamp?.toDate() || new Date(),
+        };
       }));    
       setLoading(false);
     });
@@ -38,16 +45,18 @@ export const TransactionProvider: React.FC = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  async function addTransaction(type: 'incoming' | 'outgoing', user: string, value: number) {
-    await db.add({
+  function addTransaction(type: string, user: string, value: number) {
+    const createdAt = firebase.firestore.FieldValue.serverTimestamp()
+    return db.add({
       type,
       user,
       value,
+      createdAt,
     });
   };
 
-  async function deleteTransaction(id: string) {
-    await db.doc(id).delete();
+  function deleteTransaction(id: string) {
+    return db.doc(id).delete();
   }
 
   const value = {
