@@ -40,8 +40,8 @@ const NewTransaction: React.FC = () => {
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
-      <section className="w-full md:max-w-2xl sm:px-4 sm:mx-auto pt-8 pb-3">
-        <form className="bg-white sm:rounded-lg p-4 shadow" onSubmit={handleSubmit}>
+      <section className="w-full md:max-w-2xl md:px-4 md:mx-auto pt-8 pb-3">
+        <form className="bg-white md:rounded-lg p-4 shadow" onSubmit={handleSubmit}>
           <h1 className="font-semibold text-xl text-gray-800 leading-tight mb-4">Nova Transação</h1>
           <div className="mb-4">
             <Label htmlFor="type">Tipo:</Label>

@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
     <main className="min-h-screen bg-gray-100">
       <Header />
       <section className="w-full md:max-w-sm md:px-4 md:mx-4 pt-8 pb-3">
-        <article className="bg-white sm:rounded-lg p-4 shadow">
+        <article className="bg-white md:rounded-lg p-4 shadow">
           <h1 className="font-bold text-xl text-gray-700 leading-tight my-2">
             Entradas:
             <span className="text-green-500">{` R$ ${incoming.toFixed(2)}`}</span>
@@ -56,7 +56,7 @@ const Dashboard: React.FC = () => {
       </section>
       <NewTransactionLink />
       <section className="w-full md:max-w-sm md:px-4 md:mx-4 py-3">
-        <article className="bg-white sm:rounded-lg p-4 shadow">
+        <article className="bg-white md:rounded-lg p-4 shadow">
           <h1 className="font-semibold text-xl text-gray-800 leading-tight my-2">Últimas Transações</h1>
           {!transactionsList.length && <p className="text-gray-400">Nenhuma transação no momento</p>}
           {transactionsList.map((trx, index) => <TransactionCard
