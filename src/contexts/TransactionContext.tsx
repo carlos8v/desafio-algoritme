@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { db, firebase } from '../services/firebase';
 
+import { Loading } from '../components';
+
 export interface TransactionProps {
   id: string;
   type: 'incoming' | 'outgoing';
@@ -67,7 +69,7 @@ export const TransactionProvider: React.FC = ({ children }) => {
 
   return (
     <TransactionContext.Provider value={value}>
-      {!loading && children}
+      {loading ? (<Loading />) : (children)}
     </TransactionContext.Provider>
   );
 };

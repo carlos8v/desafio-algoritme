@@ -5,5 +5,6 @@ export { default as ComboBox } from './UI/ComboBox';
 
 export { default as Header } from './Header';
 export { default as Logout } from './Logout';
+export { default as Loading } from './Loading';
 export { default as TransactionCard } from './TransactionCard';
 export { default as NewTransactionLink } from './NewTransactionLink';
