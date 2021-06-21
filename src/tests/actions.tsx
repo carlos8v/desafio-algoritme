@@ -101,12 +101,26 @@ export const mockUseTransaction = (
   mockedTrxs: TransactionProps[] = mockedTransactions,
   newTrx: TransactionProps = mockedNewTransaction,
 ) => {
-  const mockedAddFunction = jest.fn().mockResolvedValue(mockedTrxs.push(newTrx));
+  const mockedAddFunction = jest.fn().mockImplementation(() => {
+    mockedTrxs.push(newTrx);
+    return Promise.resolve();
+  });
+
+  const mockedDeleteFunction = jest.fn().mockImplementation((removeTrxId: string) => {
+    mockedTrxs = mockedTrxs.filter(({ id }) => id !== removeTrxId);
+    return Promise.resolve();
+  });
+
   const mockedUseTransaction = jest.spyOn(transactionContext, 'useTransaction');
   (mockedUseTransaction as jest.Mocked<any>).mockImplementation(() => ({
     add: mockedAddFunction,
+    delete: mockedDeleteFunction,
     transactions: mockedTrxs,
   }));
 
-  return { mockedUseTransaction, addFunction: mockedAddFunction };
+  return {
+    mockedUseTransaction,
+    addFunction: mockedAddFunction,
+    deleteFunction: mockedDeleteFunction,
+  };
 };

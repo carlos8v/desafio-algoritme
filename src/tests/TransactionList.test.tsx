@@ -5,13 +5,14 @@ import App from '../App';
 
 import {
   mockUseAuth,
+  mockUseTransaction,
   mockFirestoreOnSnapshot,
   createHistory,
 } from './actions';
 
 import { mockedTransactions } from './mocks';
 
-describe('Dashboard page', () => {
+describe('TransactionList page', () => {  
   beforeEach(() => {
     mockUseAuth();
     mockFirestoreOnSnapshot();
@@ -103,6 +104,40 @@ describe('Dashboard page', () => {
         const element = getByTestId(`transaction-${trx.id}-value`);
         expect(element).toBeInTheDocument();
       }
+    });
+  });
+
+  it('should delete mocked transaction', async () => {
+    const { mockedUseTransaction, deleteFunction } = mockUseTransaction();
+
+    const { history, getByTestId, getAllByTestId, queryByTestId } = renderWithRouter(<App />, mockedHistory);
+
+    await waitFor(() => {
+      expect(history.location.pathname).toBe('/list');
+
+      const element = getByTestId(`transaction-${mockedTransactions[0].id}-value`);
+      expect(element).toBeInTheDocument();
+
+      const transactionsList = getAllByTestId('transaction');
+      expect(transactionsList).toHaveLength(mockedTransactions.length);
+    });
+
+    await waitFor(() => {
+      const deleteTransactionButton = getByTestId(`delete-transaction-${mockedTransactions[0].id}-button`);
+      fireEvent.click(deleteTransactionButton);
+    });
+
+    await waitFor(() => {
+      const element = queryByTestId(`transaction-${mockedTransactions[0].id}-value`);
+      expect(element).not.toBeInTheDocument();
+
+      const transactionsList = getAllByTestId('transaction');
+      expect(transactionsList).toHaveLength(mockedTransactions.length - 1);
+
+      expect(mockedUseTransaction).toHaveBeenCalled();
+
+      expect(deleteFunction).toHaveBeenCalled();
+      expect(deleteFunction).toHaveBeenCalledTimes(1);
     });
   });
 });
