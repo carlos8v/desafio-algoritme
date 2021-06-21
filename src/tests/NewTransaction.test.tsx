@@ -45,11 +45,15 @@ describe('Dashboard page', () => {
       const incomingOption = getByTestId('incoming-option');
       const outgoingOption = getByTestId('outgoing-option');
 
+      const dashboardLink = getByTestId('dashboard-link');
+
       expect(typeInput).toBeInTheDocument();
       expect(valueInput).toBeInTheDocument();
       expect(submitButton).toBeInTheDocument();
       expect(incomingOption).toBeInTheDocument();
       expect(outgoingOption).toBeInTheDocument();
+
+      expect(dashboardLink).toBeInTheDocument();
 
       expect((incomingOption as HTMLOptionElement).selected).toBe(true);
       expect((outgoingOption as HTMLOptionElement).selected).toBe(false);

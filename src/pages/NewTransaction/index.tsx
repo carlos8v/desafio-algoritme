@@ -82,9 +82,8 @@ const NewTransaction: React.FC = () => {
           </Button>
           <Link
             to="/"
-            className="mx-auto block px-2 py-1 mt-4 text-sm text-gray-600 hover:text-gray-700 transition ease-in-out duration-150"
-            style={{ maxWidth: 'fit-content' }}
-            data-testid="register-link"
+            className="mx-auto block px-2 py-1 mt-4 text-sm text-gray-600 hover:text-gray-700 transition ease-in-out duration-150 text-center"
+            data-testid="dashboard-link"
           >
             Voltar
           </Link>
