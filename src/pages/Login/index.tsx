@@ -17,7 +17,9 @@ const Login: React.FC = () => {
 
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
+
     try {
+      setError('');
       setLoading(true);
       await login(email, password);
       return history.push('/');

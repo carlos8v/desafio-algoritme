@@ -21,8 +21,9 @@ const NewTransaction: React.FC = () => {
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    setLoading(true);
     try {
+      setError('');
+      setLoading(true);
       await addTrx(type, currentUser?.email || '', parseFloat(value));
       return history.push('/');
     } catch (error) {
