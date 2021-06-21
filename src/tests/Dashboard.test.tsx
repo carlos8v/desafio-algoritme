@@ -10,7 +10,7 @@ import { mockedTransactions } from './mocks';
 describe('Dashboard page', () => {
   beforeEach(() => {
     mockUseAuth();
-    mockFirestoreOnSnapshot(mockedTransactions);
+    mockFirestoreOnSnapshot();
   });  
 
   afterEach(() => jest.clearAllMocks());
@@ -28,11 +28,23 @@ describe('Dashboard page', () => {
     const { getByText } = renderWithRouter(<App />);
 
     await waitFor(() => {
-      const dashboardTitle = getByText(/Dashboard/i);
       const loggedEmail = getByText(/admin@algoritme.com/i);
-
-      expect(dashboardTitle).toBeInTheDocument();
       expect(loggedEmail).toBeInTheDocument();
+    });
+  });
+
+  it('should contain the correct data-testid', async () => {
+    const { getByText, getByTestId } = renderWithRouter(<App />);
+    
+    await waitFor(() => {
+      const dashboardTitle = getByText(/Dashboard/i);
+
+      const newTransactionLink = getByTestId('new-transaction-link');
+      const listTransactionLink = getByTestId('list-transaction-link');
+  
+      expect(dashboardTitle).toBeInTheDocument();
+      expect(newTransactionLink).toBeInTheDocument();
+      expect(listTransactionLink).toBeInTheDocument();
     });
   });
 

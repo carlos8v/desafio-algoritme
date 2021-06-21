@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { TransactionProps } from '../../contexts/TransactionContext';
+import { TransactionProps } from '../contexts/TransactionContext';
 
 const TransactionCard: React.FC<{
   transaction: TransactionProps,
   last: boolean
-}> = ({ transaction, last }) => {
+}> = ({ transaction, last, children }) => {
   const types = {
     incoming: 'Entrada',
     outgoing: 'Saída',
@@ -26,6 +26,7 @@ const TransactionCard: React.FC<{
           {` R$: ${transaction.value.toFixed(2)}`}
         </span>
       </p>
+      {children}
       {!last && <span className="block w-full my-2 border border-gray-100"></span>}
     </div>
   );

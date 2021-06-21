@@ -16,7 +16,7 @@ import { mockedTransactions, mockedNewTransaction } from './mocks';
 describe('Dashboard page', () => {
   beforeEach(() => {
     mockUseAuth();
-    mockFirestoreOnSnapshot(mockedTransactions);
+    mockFirestoreOnSnapshot();
   });
 
   const mockedHistory = createHistory(['/new']);
