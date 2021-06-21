@@ -10,7 +10,7 @@ const NewTransaction: React.FC = () => {
   const [type, setType] = useState<string>('incoming');
   const [value, setValue] = useState<string>('0.00');
 
-  const [loading, setLoaging] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
   const { currentUser } = useAuth();
@@ -21,7 +21,7 @@ const NewTransaction: React.FC = () => {
   async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    setLoaging(true);
+    setLoading(true);
     try {
       await addTrx(type, currentUser?.email || '', parseFloat(value));
       return history.push('/');
@@ -29,7 +29,7 @@ const NewTransaction: React.FC = () => {
       setError('Erro ao criar nova transação');
     }
 
-    setLoaging(false);
+    setLoading(false);
   }
 
   function handleChangeType(e: React.ChangeEvent<HTMLSelectElement>) {
