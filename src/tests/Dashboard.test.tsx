@@ -3,14 +3,14 @@ import renderWithRouter from './renderWithRouter';
 import { waitFor } from '@testing-library/react';
 import App from '../App';
 
-import { mockCheckLoggedUser, mockGetTransactions } from './actions';
+import { mockUseAuth, mockFirestoreOnSnapshot } from './actions';
 
-import { transactions } from './mocks';
+import { mockedTransactions } from './mocks';
 
 describe('Dashboard page', () => {
   beforeEach(() => {
-    mockCheckLoggedUser();
-    mockGetTransactions(transactions);
+    mockUseAuth();
+    mockFirestoreOnSnapshot(mockedTransactions);
   });  
 
   afterEach(() => jest.clearAllMocks());
@@ -41,9 +41,10 @@ describe('Dashboard page', () => {
 
     await waitFor(() => {
       const transactionsList = getAllByTestId('transaction');
-      expect(transactionsList).toHaveLength(transactions.length);
+      const maxLastTransactionsLength = 5;
+      expect(transactionsList).toHaveLength(maxLastTransactionsLength);
 
-      for (const trx of transactions) {
+      for (const trx of mockedTransactions.slice(0, maxLastTransactionsLength)) {
         const element = getByTestId(`transaction-${trx.id}-value`);
         expect(element).toBeInTheDocument();
       }

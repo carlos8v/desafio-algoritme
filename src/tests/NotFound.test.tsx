@@ -3,10 +3,10 @@ import renderWithRouter from './renderWithRouter';
 import { waitFor } from '@testing-library/react';
 import App from '../App';
 
-import { mockGetTransactions } from './actions';
+import { mockFirestoreOnSnapshot } from './actions';
 
 describe('Not found page', () => {
-  beforeEach(() => mockGetTransactions());
+  beforeEach(() => mockFirestoreOnSnapshot());
   afterEach(() => jest.clearAllMocks());
 
   it('should not exist in the page', async () => {
@@ -20,6 +20,7 @@ describe('Not found page', () => {
   it('should have the correct text', async () => {
     const { history, getByText } = renderWithRouter(<App />);
     history.push('/not-exists');
+
     await waitFor(() => {
       const element = getByText(/404 - Página não encontrada/i);
       expect(element).toBeInTheDocument();

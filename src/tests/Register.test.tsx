@@ -3,10 +3,10 @@ import renderWithRouter from './renderWithRouter';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
 
-import { signUp, mockSignUp, createHistory, mockGetTransactions } from './actions';
+import { signUp, mockSignUp, createHistory, mockFirestoreOnSnapshot } from './actions';
 
 describe('Register page', () => {
-  beforeEach(() => mockGetTransactions());
+  beforeEach(() => mockFirestoreOnSnapshot());
   afterEach(() => jest.clearAllMocks());
 
   const mockedHistory = createHistory(['/register']);
@@ -60,7 +60,5 @@ describe('Register page', () => {
       expect(mockedSignUp).toHaveBeenCalled();
       expect(mockedSignUp).toHaveBeenCalledTimes(1);
     });
-
-    mockedSignUp.mockRestore();
   });
 });

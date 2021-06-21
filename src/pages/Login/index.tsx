@@ -39,7 +39,7 @@ const Login: React.FC = () => {
           <Label htmlFor="email">E-mail:</Label>
           <Input
             value={email}
-            onChange={(e) => setEmail(e.currentTarget.value)}
+            onChange={(e) => setEmail(e.target.value)}
             type="email"
             name="email"
             id="email"
