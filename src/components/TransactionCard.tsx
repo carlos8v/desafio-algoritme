@@ -4,8 +4,8 @@ import { TransactionProps } from '../contexts/TransactionContext';
 
 const TransactionCard: React.FC<{
   transaction: TransactionProps,
-  last: boolean
-}> = ({ transaction, last, children }) => {
+  last?: boolean
+}> = ({ transaction, last = false, children }) => {
   const types = {
     incoming: 'Entrada',
     outgoing: 'Saída',

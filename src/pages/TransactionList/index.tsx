@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { TransactionProps, useTransaction } from '../../contexts/TransactionContext';
@@ -22,6 +23,8 @@ const TransactionList: React.FC = () => {
 
   const { currentUser } = useAuth();
   const { transactions, delete: deleteTrx } = useTransaction();
+
+  const history = useHistory();
 
   useEffect(() => {
     setTransactionsList(transactions
@@ -78,7 +81,7 @@ const TransactionList: React.FC = () => {
       </section>
       <section className="w-full md:max-w-2xl md:px-4 md:mx-auto py-3">
         <article className="bg-white md:rounded-lg p-4 shadow">
-        {!transactionsList.length && <p className="text-gray-600">Nenhuma transação no momento</p>}
+        {!transactionsList.length && <p className="font-medium text-center text-gray-600">Nenhuma transação no momento</p>}
         {transactionsList.map((trx, index) => (
           <TransactionCard
             key={trx.id}
@@ -99,6 +102,17 @@ const TransactionList: React.FC = () => {
             </Button>
           </TransactionCard>
         ))}
+        <Button
+          onClick={() => history.push('/')}
+          background="bg-purple-800"
+          hover="hover:bg-purple-700"
+          color="text-white"
+          type="button"
+          data-testid="dashboard-link"
+          customStyle="px-5 py-2 rounded block w-full mt-4"
+        >
+          Voltar
+        </Button>
         </article>
       </section>
       <Logout />
