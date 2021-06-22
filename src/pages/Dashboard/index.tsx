@@ -12,6 +12,8 @@ import {
   Button
 } from '../../components';
 
+import TransactionGraph from './TransactionGraph';
+
 const Dashboard: React.FC = () => {
   const [transactionsList, setTransactionsList] = useState<TransactionProps[]>([]);
   const [incoming, setIncoming] = useState<number>(0.0);
@@ -47,45 +49,50 @@ const Dashboard: React.FC = () => {
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
-      <section className="w-full md:max-w-sm md:px-4 md:mx-4 pt-8 pb-3">
-        <article className="bg-white md:rounded-lg p-4 shadow">
-          <h1 className="font-bold text-xl text-gray-700 leading-tight my-2">
-            Entradas:
-            <span className="text-green-500">{` R$ ${incoming.toFixed(2)}`}</span>
-        </h1>
-          <h1 className="font-bold text-xl text-gray-700 leading-tight my-2">
-            Saídas:
-            <span className="text-red-500">{` R$ ${outgoing.toFixed(2)}`}</span>
-          </h1>
-          <h1 className="font-semibold text-lg text-gray-600 mt-4 mb-2">{`Balanço: R$ ${(incoming - outgoing).toFixed(2)}`}</h1>
-        </article>
+      <section className="w-full flex flex-col lg:flex-row">
+        <TransactionGraph balance={incoming - outgoing} />
+        <section className="w-full">
+          <section className="lg:px-4 lg:mr-4 pt-8 pb-3">
+            <article className="bg-white lg:rounded-lg p-4 shadow">
+              <h1 className="font-bold text-xl text-gray-700 leading-tight my-2">
+                Entradas:
+                <span className="text-green-500">{` R$ ${incoming.toFixed(2)}`}</span>
+            </h1>
+              <h1 className="font-bold text-xl text-gray-700 leading-tight my-2">
+                Saídas:
+                <span className="text-red-500">{` R$ ${outgoing.toFixed(2)}`}</span>
+              </h1>
+            </article>
+          </section>
+          <NewTransactionLink />
+        </section>
       </section>
-      <NewTransactionLink />
-      <section className="w-full md:max-w-sm md:px-4 md:mx-4 py-3">
-        <article className="bg-white md:rounded-lg p-4 shadow">
-          <h1 className="font-semibold text-xl text-gray-800 leading-tight my-2">Últimas Transações</h1>
-          {!transactionsList.length && <p className="text-gray-400">Nenhuma transação no momento</p>}
-          {transactionsList.map((trx, index) => (
-            <TransactionCard
-              key={trx.id}
-              transaction={trx}
-              last={index === transactionsList.length - 1}
-            />
-          ))}
-          <Button
-            onClick={() => history.push('/list')}
-            background="bg-purple-800"
-            hover="hover:bg-purple-700"
-            color="text-white"
-            type="button"
-            data-testid="list-transaction-link"
-            customStyle="px-5 py-2 rounded block w-full mt-4"
-          >
-            Ver Mais
-          </Button>
-        </article>
+      <section className="w-full">
+        <section className="lg:px-4 lg:mx-4 py-3 lg:pt-8 lg:pb-3">
+          <article className="bg-white lg:rounded-lg p-4 shadow">
+            <h1 className="font-semibold text-xl text-gray-800 leading-tight my-2">Últimas Transações</h1>
+            {!transactionsList.length && <p className="text-gray-400">Nenhuma transação no momento</p>}
+            {transactionsList.map((trx) => (
+              <TransactionCard
+                key={trx.id}
+                transaction={trx}
+              />
+            ))}
+            <Button
+              onClick={() => history.push('/list')}
+              background="bg-purple-800"
+              hover="hover:bg-purple-700"
+              color="text-white"
+              type="button"
+              data-testid="list-transaction-link"
+              customStyle="px-5 py-2 rounded block w-full mt-4"
+            >
+              Ver Mais
+            </Button>
+          </article>
+        </section>
+        <Logout />
       </section>
-      <Logout />
     </main>
   );
 };
